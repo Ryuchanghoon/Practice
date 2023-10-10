@@ -4,17 +4,30 @@ input = sys.stdin.readline
 
 n = int(input())
 
-count = [0] * 10
+cnt = [0] * 10
+multi = 1
 
-x = 1
+def nine(num): #9로 맞추기.
+    while num % 10 != 9:
+        
+        for digit in str(num):
+            cnt[int(digit)] += multi
+        num -= 1
+    return num
 
-while n >= x:
-    a, b = divmod(n, x * 10)
-    count[0] += max(0, (a - 1) * x + min(x, max(b - x + 1, 0)))
+while n > 0:
+    n = nine(n) #
 
-    for i in range(1, 10):
-        count[i] += a * x + min(x, max(b - i * x + 1, 0))
+    if n < 10: #1자리면,
+        for i in range(n + 1): # 그게 최고 자리수면, 그냥 계속 더해주고
+            cnt[i] += multi
 
-    x *= 10
+    else:
+        for j in range(10): # 그게 아니면 0~9까지. 계산한 식. +
+            cnt[j] += (n // 10 + 1) * multi
 
-print(*count)
+    cnt[0] -= multi
+    multi *= 10
+    n //= 10
+
+print(*cnt)
